@@ -7,8 +7,10 @@ const App = () => {
   return (
     <div className="App">
       <Router>
-        <Link to="/createpost">Create A Post</Link>
-        <Link to="/">Home Page</Link>
+        <div className="navbar">
+          <Link to="/createpost">Create A Post</Link>
+          <Link to="/">Home Page</Link>
+        </div>
 
         <Switch>
           <Route exact path="/" component={Home} />
