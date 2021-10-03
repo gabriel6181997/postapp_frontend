@@ -10,7 +10,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const App = () => {
-  const [authState, setAuthState] = useState(false);
+  const [authState, setAuthState] = useState({
+    username: "",
+    id: 0,
+    status: false,
+  });
 
   useEffect(() => {
     axios
@@ -19,28 +23,48 @@ const App = () => {
       })
       .then((response) => {
         if (response.data.error) {
-          setAuthState(false);
+          setAuthState({ ...authState, status: false });
         } else {
-          setAuthState(true);
+          setAuthState({
+            username: response.data.username,
+            id: response.data.id,
+            status: true,
+          });
         }
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    setAuthState({ username: "", id: 0, status: false });
+  };
 
   return (
     <div className="App">
       <AuthContext.Provider value={{ authState, setAuthState }}>
         <Router>
           <div className="navbar">
-            <Link to="/createpost">Create A Post</Link>
-            <Link to="/">Home Page</Link>
-            {!authState && (
-              <>
-                <Link to="/login">Login</Link>
-                <Link to="/registration">Registration</Link>
-              </>
-            )}
+            <div className="links">
+              {!authState.status ? (
+                <>
+                  <Link to="/login">Login</Link>
+                  <Link to="/registration">Registration</Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/">Home Page</Link>
+                  <Link to="/createpost">Create A Post</Link>
+                </>
+              )}
+            </div>
+            {authState.status ? (
+              <div className="loggedInContainer">
+                <h1>{authState.username}</h1>
+                <button onClick={logout}>Logout</button>
+              </div>
+            ) : null}
           </div>
-
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/createpost" component={CreatePost} />
