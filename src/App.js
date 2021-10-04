@@ -8,6 +8,7 @@ import { Login } from "./pages/Login";
 import { AuthContext } from "./helpers/AuthContext";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { PageNotFound } from "./pages/PageNotFound";
 
 const App = () => {
   const [authState, setAuthState] = useState({
@@ -71,6 +72,7 @@ const App = () => {
             <Route exact path="/post/:id" component={Post} />
             <Route exact path="/registration" component={Registration} />
             <Route exact path="/login" component={Login} />
+            <Route path="*" exact component={PageNotFound} />
           </Switch>
         </Router>
       </AuthContext.Provider>
