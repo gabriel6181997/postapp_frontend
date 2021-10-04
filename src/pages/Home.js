@@ -2,15 +2,22 @@ import "../App.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 export const Home = () => {
   const [listOfPosts, setListsOfPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([]);
   let history = useHistory();
 
   useEffect(() => {
-    axios.get("http://localhost:3001/posts").then((response) => {
-      setListsOfPosts(response.data);
-    });
+    axios
+      .get("http://localhost:3001/posts", {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
+      .then((response) => {
+        setListsOfPosts(response.data.listOfPosts);
+        setLikedPosts(response.data.likedPosts.map((like) => like.PostId));
+      });
   }, []);
 
   const likePost = (postId) => {
@@ -40,6 +47,12 @@ export const Home = () => {
             }
           })
         );
+
+        if (likedPosts.includes(postId)) {
+          setLikedPosts(likedPosts.filter((id) => id !== postId));
+        } else {
+          setLikedPosts([...likedPosts, postId]);
+        }
       });
   };
 
@@ -58,15 +71,18 @@ export const Home = () => {
               {post.postText}
             </div>
             <div className="footer">
-              {post.username}
-              <button
-                onClick={() => {
-                  likePost(post.id);
-                }}
-              >
-                Like
-              </button>
-              <label>{post.Likes.length}</label>
+              <div className="username">{post.username}</div>
+              <div className="buttons">
+                <ThumbUpAltIcon
+                  className={
+                    likedPosts.includes(post.id) ? "unlikeBttn" : "likeBttn"
+                  }
+                  onClick={() => {
+                    likePost(post.id);
+                  }}
+                />
+                <label>{post.Likes.length}</label>
+              </div>
             </div>
           </div>
         );
