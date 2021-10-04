@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 export const Home = () => {
-  const [listofPosts, setListsOfPosts] = useState([]);
+  const [listOfPosts, setListsOfPosts] = useState([]);
   let history = useHistory();
 
   useEffect(() => {
@@ -13,20 +13,61 @@ export const Home = () => {
     });
   }, []);
 
+  const likePost = (postId) => {
+    axios
+      .post(
+        "http://localhost:3001/likes",
+        {
+          PostId: postId,
+        },
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      )
+      .then((response) => {
+        setListsOfPosts(
+          listOfPosts.map((post) => {
+            if (post.id === postId) {
+              if (response.data.liked) {
+                return { ...post, Likes: [...post.Likes, 0] };
+              } else {
+                const likesArray = post.Likes;
+                likesArray.pop();
+                return { ...post, Likes: likesArray };
+              }
+            } else {
+              return post;
+            }
+          })
+        );
+      });
+  };
+
   return (
     <div className="App">
-      {listofPosts.map((post, key) => {
+      {listOfPosts.map((post, key) => {
         return (
-          <div
-            className="post"
-            key={key}
-            onClick={() => {
-              history.push(`/post/${post.id}`);
-            }}
-          >
+          <div className="post" key={key}>
             <div className="title">{post.title}</div>
-            <div className="body">{post.postText}</div>
-            <div className="footer">{post.username}</div>
+            <div
+              className="body"
+              onClick={() => {
+                history.push(`/post/${post.id}`);
+              }}
+            >
+              {post.postText}
+            </div>
+            <div className="footer">
+              {post.username}
+              <button
+                onClick={() => {
+                  likePost(post.id);
+                }}
+              >
+                Like
+              </button>
+              <label>{post.Likes.length}</label>
+            </div>
           </div>
         );
       })}
