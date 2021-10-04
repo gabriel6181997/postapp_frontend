@@ -4,9 +4,20 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useHistory } from "react-router";
+import { AuthContext } from "../helpers/AuthContext";
+import { useContext } from "react";
+import { useEffect } from "react";
 
 export const CreatePost = () => {
   let history = useHistory();
+  const { authState } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!authState.status) {
+      history.push("/login");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const initialValues = {
     title: "",

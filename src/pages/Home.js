@@ -3,21 +3,29 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import { AuthContext } from "../helpers/AuthContext";
+import { useContext } from "react";
 
 export const Home = () => {
   const [listOfPosts, setListsOfPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   let history = useHistory();
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/posts", {
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      })
-      .then((response) => {
-        setListsOfPosts(response.data.listOfPosts);
-        setLikedPosts(response.data.likedPosts.map((like) => like.PostId));
-      });
+    if (!authState.status) {
+      history.push("/login");
+    } else {
+      axios
+        .get("http://localhost:3001/posts", {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        })
+        .then((response) => {
+          setListsOfPosts(response.data.listOfPosts);
+          setLikedPosts(response.data.likedPosts.map((like) => like.PostId));
+        });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const likePost = (postId) => {
