@@ -3,14 +3,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import { AuthContext } from "../helpers/AuthContext";
-import { useContext } from "react";
 
 export const Home = () => {
   const [listOfPosts, setListsOfPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   let history = useHistory();
-  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
