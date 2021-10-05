@@ -13,10 +13,10 @@ export const CreatePost = () => {
   const { authState } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!authState.status) {
+    if (!localStorage.getItem("accessToken")) {
       history.push("/login");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initialValues = {
