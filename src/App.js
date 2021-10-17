@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { PageNotFound } from "./pages/PageNotFound";
 import {Profile} from "./pages/Profile";
+import { ChangePassword } from "./pages/ChangePassword";
 
 const App = () => {
   const [authState, setAuthState] = useState({
@@ -74,6 +75,7 @@ const App = () => {
             <Route exact path="/registration" component={Registration} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/profile/:id" component={Profile} />
+            <Route exact path="/changepassword" component={ChangePassword} />
             <Route path="*" exact component={PageNotFound} />
           </Switch>
         </Router>
