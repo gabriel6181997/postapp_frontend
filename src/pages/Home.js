@@ -1,7 +1,7 @@
 import "../App.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 export const Home = () => {
@@ -22,7 +22,7 @@ export const Home = () => {
           setLikedPosts(response.data.likedPosts.map((like) => like.PostId));
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const likePost = (postId) => {
@@ -76,7 +76,9 @@ export const Home = () => {
               {post.postText}
             </div>
             <div className="footer">
-              <div className="username">{post.username}</div>
+              <div className="username">
+                <Link to={`/profile/${post.UserId}`}>{post.username}</Link>
+              </div>
               <div className="buttons">
                 <ThumbUpAltIcon
                   className={
