@@ -2,11 +2,20 @@ import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../helpers/AuthContext";
+import { ChangeEvent } from "react-router/node_modules/@types/react";
+import { Param } from "../types/param";
+import { PostObject } from "../types/post";
 
 export const Post = () => {
-  let { id } = useParams();
-  const [postObject, setPostObject] = useState({});
-  const [comments, setComments] = useState([]);
+  let { id } = useParams<Param>();
+  const [postObject, setPostObject] = useState<PostObject>({
+    UserId: 0,
+    id: 0,
+    title: "",
+    postText: "",
+    username: "",
+  });
+  const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
   const { authState } = useContext(AuthContext);
   let history = useHistory();
@@ -22,7 +31,7 @@ export const Post = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
   };
 
@@ -54,7 +63,7 @@ export const Post = () => {
       });
   };
 
-  const deleteComment = (id) => {
+  const deleteComment = (id: number) => {
     axios
       .delete(`http://localhost:3001/comments/${id}`, {
         headers: {
@@ -66,7 +75,7 @@ export const Post = () => {
       });
   };
 
-  const deletePost = (id) => {
+  const deletePost = (id: number) => {
     axios
       .delete(`http://localhost:3001/posts/${id}`, {
         headers: {
@@ -78,7 +87,7 @@ export const Post = () => {
       });
   };
 
-  const editPost = (option) => {
+  const editPost = (option: "title" | "body") => {
     if (option === "title") {
       let newTitle = prompt("Enter new title");
       axios.put(
@@ -90,7 +99,9 @@ export const Post = () => {
           },
         }
       );
-      setPostObject({ ...postObject, title: newTitle });
+      if (newTitle) {
+        setPostObject({ ...postObject, title: newTitle });
+      }
     } else {
       let newPostText = prompt("Enter new text");
       axios.put(
@@ -102,7 +113,9 @@ export const Post = () => {
           },
         }
       );
-      setPostObject({ ...postObject, postText: newPostText });
+      if (newPostText) {
+        setPostObject({ ...postObject, postText: newPostText });
+      }
     }
   };
 
@@ -113,26 +126,26 @@ export const Post = () => {
           <div
             className="title"
             onClick={() => {
-              if (authState.username === postObject.username) {
+              if (authState.username === postObject?.username) {
                 editPost("title");
               }
             }}
           >
-            {postObject.title}
+            {postObject?.title}
           </div>
           <div
             className="body"
             onClick={() => {
-              if (authState.username === postObject.username) {
+              if (authState.username === postObject?.username) {
                 editPost("body");
               }
             }}
           >
-            {postObject.postText}
+            {postObject?.postText}
           </div>
           <div className="footer">
-            {postObject.username}
-            {authState.username === postObject.username ? (
+            {postObject?.username}
+            {authState.username === postObject?.username ? (
               <button
                 onClick={() => {
                   deletePost(postObject.id);

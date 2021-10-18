@@ -1,10 +1,10 @@
 import "../App.css";
-import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
+import { NewPost } from "../types/post";
 
 export const CreatePost = () => {
   let history = useHistory();
@@ -21,7 +21,7 @@ export const CreatePost = () => {
     postText: "",
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: NewPost) => {
     axios
       .post("http://localhost:3001/posts", data, {
         headers: { accessToken: localStorage.getItem("accessToken") },

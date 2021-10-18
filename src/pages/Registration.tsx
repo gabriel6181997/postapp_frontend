@@ -14,7 +14,7 @@ export const Registration = () => {
     password: Yup.string().min(4).max(20).required(),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     axios.post("http://localhost:3001/auth", data).then(()=> {
       console.log(data)
     })

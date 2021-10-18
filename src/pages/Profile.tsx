@@ -3,12 +3,14 @@ import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../helpers/AuthContext";
 import { useContext } from "react";
+import { Param } from "../types/param";
+import { Post } from "../types/post";
 
 export const Profile = () => {
-  let { id } = useParams();
+  let { id } = useParams<Param>();
   let history = useHistory();
   const [username, setUsername] = useState("");
-  const [listOfPosts, setListOfPosts] = useState([]);
+  const [listOfPosts, setListOfPosts] = useState<Post[]>([]);
   const { authState } = useContext(AuthContext);
 
   useEffect(() => {

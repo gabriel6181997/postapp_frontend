@@ -3,10 +3,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import { Like, Post } from "../types/post";
 
 export const Home = () => {
-  const [listOfPosts, setListsOfPosts] = useState([]);
-  const [likedPosts, setLikedPosts] = useState([]);
+  const [listOfPosts, setListsOfPosts] = useState<Post[]>([]);
+  const [likedPosts, setLikedPosts] = useState<number[]>([]);
   let history = useHistory();
 
   useEffect(() => {
@@ -19,13 +20,15 @@ export const Home = () => {
         })
         .then((response) => {
           setListsOfPosts(response.data.listOfPosts);
-          setLikedPosts(response.data.likedPosts.map((like) => like.PostId));
+          setLikedPosts(
+            response.data.likedPosts.map((like: Like) => like.PostId)
+          );
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const likePost = (postId) => {
+  const likePost = (postId: number) => {
     axios
       .post(
         "http://localhost:3001/likes",
@@ -37,21 +40,25 @@ export const Home = () => {
         }
       )
       .then((response) => {
-        setListsOfPosts(
-          listOfPosts.map((post) => {
-            if (post.id === postId) {
-              if (response.data.liked) {
-                return { ...post, Likes: [...post.Likes, 0] };
-              } else {
-                const likesArray = post.Likes;
-                likesArray.pop();
-                return { ...post, Likes: likesArray };
-              }
+        const newListOfPost = listOfPosts.map((post) => {
+          if (post.id === postId) {
+            if (response.data.liked) {
+              
+              return {
+                ...post,
+                likes: post.Likes.length + 1,
+              };
             } else {
-              return post;
+              return {
+                ...post,
+                likes: post.Likes.length - 1,
+              };
             }
-          })
-        );
+          } else {
+            return post;
+          }
+        });
+        setListsOfPosts(newListOfPost);
 
         if (likedPosts.includes(postId)) {
           setLikedPosts(likedPosts.filter((id) => id !== postId));
@@ -60,6 +67,7 @@ export const Home = () => {
         }
       });
   };
+
 
   return (
     <div className="App">

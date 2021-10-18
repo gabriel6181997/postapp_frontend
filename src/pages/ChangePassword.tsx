@@ -1,30 +1,33 @@
 import axios from "axios";
 import { useState } from "react";
+import { ChangeEvent } from "react-router/node_modules/@types/react";
 
 export const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
-  const handleOldPassword = (e) => {
+  const handleOldPassword = (e: ChangeEvent<HTMLInputElement>) => {
     setOldPassword(e.target.value);
   };
 
-  const handleNewPassword = (e) => {
+  const handleNewPassword = (e: ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
   };
 
   const handleChangePassword = () => {
-    axios.put(
-      "http://localhost:3001/auth/changepassword",
-      { oldPassword, newPassword },
-      {
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      }
-    ).then((response)=> {
-      if(response.data.error) {
-        alert(response.data.error);
-      }
-    });
+    axios
+      .put(
+        "http://localhost:3001/auth/changepassword",
+        { oldPassword, newPassword },
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      )
+      .then((response) => {
+        if (response.data.error) {
+          alert(response.data.error);
+        }
+      });
   };
 
   return (

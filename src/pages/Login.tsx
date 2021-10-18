@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { ChangeEvent } from "react-router/node_modules/@types/react";
 import { AuthContext } from "../helpers/AuthContext";
 
 export const Login = () => {
@@ -10,11 +11,11 @@ export const Login = () => {
 
   let history = useHistory();
 
-  const handleUsername = (e) => {
+  const handleUsername = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
 
-  const handlePassword = (e) => {
+  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
