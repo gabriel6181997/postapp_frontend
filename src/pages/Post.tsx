@@ -5,6 +5,7 @@ import { AuthContext } from "../helpers/AuthContext";
 import { ChangeEvent } from "react-router/node_modules/@types/react";
 import { Param } from "../types/param";
 import { PostObject } from "../types/post";
+import { API_URL } from "../api/endpoint";
 
 export const Post = () => {
   let { id } = useParams<Param>();
@@ -21,11 +22,11 @@ export const Post = () => {
   let history = useHistory();
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/posts/byId/${id}`).then((response) => {
+    axios.get(`${API_URL}/posts/byId/${id}`).then((response) => {
       setPostObject(response.data);
     });
 
-    axios.get(`http://localhost:3001/comments/${id}`).then((response) => {
+    axios.get(`${API_URL}/comments/${id}`).then((response) => {
       setComments(response.data);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,7 +39,7 @@ export const Post = () => {
   const addComment = () => {
     axios
       .post(
-        "http://localhost:3001/comments",
+        `${API_URL}/comments`,
         {
           commentBody: newComment,
           PostId: id,
@@ -65,7 +66,7 @@ export const Post = () => {
 
   const deleteComment = (id: number) => {
     axios
-      .delete(`http://localhost:3001/comments/${id}`, {
+      .delete(`${API_URL}/comments/${id}`, {
         headers: {
           accessToken: localStorage.getItem("accessToken"),
         },
@@ -77,7 +78,7 @@ export const Post = () => {
 
   const deletePost = (id: number) => {
     axios
-      .delete(`http://localhost:3001/posts/${id}`, {
+      .delete(`${API_URL}/posts/${id}`, {
         headers: {
           accessToken: localStorage.getItem("accessToken"),
         },
@@ -91,7 +92,7 @@ export const Post = () => {
     if (option === "title") {
       let newTitle = prompt("Enter new title");
       axios.put(
-        `http://localhost:3001/posts/title`,
+        `${API_URL}/posts/title`,
         { newTitle, id },
         {
           headers: {
@@ -105,7 +106,7 @@ export const Post = () => {
     } else {
       let newPostText = prompt("Enter new text");
       axios.put(
-        `http://localhost:3001/posts/postText`,
+        `${API_URL}/posts/postText`,
         { newText: newPostText, id },
         {
           headers: {

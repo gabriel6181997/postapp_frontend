@@ -2,6 +2,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { API_URL } from "../api/endpoint";
 
 export const Registration = () => {
   const initialValues = {
@@ -14,11 +15,11 @@ export const Registration = () => {
     password: Yup.string().min(4).max(20).required(),
   });
 
-  const onSubmit = (data: any) => {
-    axios.post("http://localhost:3001/auth", data).then(()=> {
-      console.log(data)
-    })
-  }
+  const onSubmit = (data: { username: string; password: string }) => {
+    axios.post(`${API_URL}/auth`, data).then(() => {
+      console.log(data);
+    });
+  };
 
   return (
     <div>

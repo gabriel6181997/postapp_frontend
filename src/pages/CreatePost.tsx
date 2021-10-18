@@ -5,6 +5,7 @@ import axios from "axios";
 import { useHistory } from "react-router";
 import { useEffect } from "react";
 import { NewPost } from "../types/post";
+import { API_URL } from "../api/endpoint";
 
 export const CreatePost = () => {
   let history = useHistory();
@@ -23,7 +24,7 @@ export const CreatePost = () => {
 
   const onSubmit = (data: NewPost) => {
     axios
-      .post("http://localhost:3001/posts", data, {
+      .post(`${API_URL}/posts`, data, {
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
       .then(() => {

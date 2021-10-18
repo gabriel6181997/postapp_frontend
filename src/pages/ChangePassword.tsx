@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { ChangeEvent } from "react-router/node_modules/@types/react";
+import { API_URL } from "../api/endpoint";
 
 export const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -17,7 +18,7 @@ export const ChangePassword = () => {
   const handleChangePassword = () => {
     axios
       .put(
-        "http://localhost:3001/auth/changepassword",
+        `${API_URL}/auth/changepassword`,
         { oldPassword, newPassword },
         {
           headers: { accessToken: localStorage.getItem("accessToken") },

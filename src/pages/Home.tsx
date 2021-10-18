@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { Like, Post } from "../types/post";
+import { API_URL } from "../api/endpoint";
 
 export const Home = () => {
   const [listOfPosts, setListsOfPosts] = useState<Post[]>([]);
@@ -15,7 +16,7 @@ export const Home = () => {
       history.push("/login");
     } else {
       axios
-        .get("http://localhost:3001/posts", {
+        .get(`${API_URL}/posts`, {
           headers: { accessToken: localStorage.getItem("accessToken") },
         })
         .then((response) => {
@@ -31,7 +32,7 @@ export const Home = () => {
   const likePost = (postId: number) => {
     axios
       .post(
-        "http://localhost:3001/likes",
+        `${API_URL}/likes`,
         {
           PostId: postId,
         },
@@ -43,7 +44,6 @@ export const Home = () => {
         const newListOfPost = listOfPosts.map((post) => {
           if (post.id === postId) {
             if (response.data.liked) {
-              
               return {
                 ...post,
                 likes: post.Likes.length + 1,
@@ -67,7 +67,6 @@ export const Home = () => {
         }
       });
   };
-
 
   return (
     <div className="App">

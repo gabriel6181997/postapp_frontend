@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { ChangeEvent } from "react-router/node_modules/@types/react";
+import { API_URL } from "../api/endpoint";
 import { AuthContext } from "../helpers/AuthContext";
 
 export const Login = () => {
@@ -21,7 +22,7 @@ export const Login = () => {
 
   const handleLogin = () => {
     const data = { username, password };
-    axios.post("http://localhost:3001/auth/login", data).then((response) => {
+    axios.post(`${API_URL}/auth/login`, data).then((response) => {
       if (response.data.error) {
         alert(response.data.error);
       } else {

@@ -5,6 +5,7 @@ import { AuthContext } from "../helpers/AuthContext";
 import { useContext } from "react";
 import { Param } from "../types/param";
 import { Post } from "../types/post";
+import { API_URL } from "../api/endpoint";
 
 export const Profile = () => {
   let { id } = useParams<Param>();
@@ -14,11 +15,11 @@ export const Profile = () => {
   const { authState } = useContext(AuthContext);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/auth/basicinfo/${id}`).then((response) => {
+    axios.get(`${API_URL}/auth/basicinfo/${id}`).then((response) => {
       setUsername(response.data.username);
     });
 
-    axios.get(`http://localhost:3001/posts/byuserId/${id}`).then((response) => {
+    axios.get(`${API_URL}/posts/byuserId/${id}`).then((response) => {
       setListOfPosts(response.data);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
