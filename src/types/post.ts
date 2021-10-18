@@ -6,11 +6,11 @@ export type NewPost = {
 export type Post = {
   Likes: Like[];
   UserId: number
-  createdAt: Date
+  createdAt?: Date
   id: number
   postText: string
   title: string
-  updatedAt: Date
+  updatedAt?: Date
   username: string
 }
 
@@ -18,8 +18,8 @@ export type Like  = {
   id: number;
   PostId: number;
   UserId: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type PostObject = {
